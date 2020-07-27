@@ -1,0 +1,22 @@
+comandos kubernetes:
+
+kubectl run my-nginx --image=nginx   -> version 1.17
+
+kubectl get pods 
+
+kubectl describe pods  
+
+kubectl get pods -o wide   -> ver ip del pod y node
+
+kubectl get all
+
+kubectl delete deployment my-nginx 
+
+kubectl run my-nginx --image=nginx --restart=Never -> Crear solo el pod
+
+kubectl get all
+
+kubectl delete pod my-nginx  ->Eliminar pod
+
+kubectl get all
+
