@@ -20,3 +20,121 @@ kubectl delete pod my-nginx  ->Eliminar pod
 
 kubectl get all
 
+======================
+kubectl run pingpong --image alpine ping 1.1.1.1
+kubectl get all
+kubectl logs deploy/pingpong
+
+kubectl scale deploy/pingpong --replicas 3
+kubectl get all
+
+//--tail muestra la ultima linea de los log
+//--flow sigue dando los datos de futuro de los logs nuevos
+kubectl logs deploy/pingpong --tail 1 --follow
+kubectl get all
+
+//especificar nombre(name) del pod para ver sus logs
+kubectl logs pod/pingpong-c849c8bbc-65dc6 --follow 
+
+kubectl delete deployment pingpong
+kubectl get all
+
+=====
+Pod:
+
+kubectl create -f podtest.yml  -> crear solo el pod
+kubectl describe pods
+kubectl get all
+kubectl delete pod app1-pod
+
+kubectl apply -f podtest.yml  -> crear y modificar
+kubectl get pods
+kubeclt get pods -o wide
+kubectl delete pod app1-pod
+kubectl get all
+
+======
+ReplicationController:
+
+kubectl apply -f rctest.yml
+kubectl get replicationcontroller
+kubectl get pods
+kubectl delete pod app1-rc-hsk87 -> elimina el pod pero se creara automaticamente uno nuevo por el replicationController
+kubectl get pods
+kubectl delete replicationcontroller app1-rc
+kubectl get pods
+kubectl get all
+
+========
+ReplicaSet
+kubectl apply -f rstest.yml
+kubectl get replicaset
+kubectl get pods
+kubectl delete pod app1-rs-4wcq7   ->name pod
+kubectl get pods
+
+//replicaset tiene configurado solo 4 replicas
+//si se crea otro pod lo eliminara
+kubectl apply -f podtest.yml
+kubectl describe replicaset
+kubectl get all
+
+//cambiar config de replica a 6
+kubectl apply -f rstest.yml
+--salida: replicaset.apps/app1-rs configured
+kubectl get replicaset
+
+//escalar hacia abajo
+kubectl scale --replicas=2 -f rstest.yml
+kubectl get pods
+kubectl delete replicaset app1-rs
+
+
+=====
+Deployment
+kubectl apply -f dptest.yml
+kubectl describe deployment
+kubectl scale deploy/app1-dp --replicas 2
+kubectl describe deployment
+kubectl get all
+kubectl delete deployment app1-dp
+kubectl get all
+
+=====
+Update and Rollback
+
+nano dptest.yml   
+kubectl get all  
+kubectl apply -f dptest.yml 
+kubectl describe deployment 
+kubectl rollout status deploy/app1-dp
+kubectl rollout history deploy/app1-dp
+kubectl delete deployment app1-dp
+
+kubectl apply -f dptest.yml --record
+kubectl rollout history deploy/app1-dp
+
+//cambiar imagen del deployment, pero no actualiza el archivo yml
+kubectl set image deployment/app1-dp nginx-container=nginx:1.17.10
+
+kubectl rollout status deploy/app1-dp
+kubectl rollout history deploy/app1-dp
+
+Rollback
+kubectl rollout undo deployment/app1-dp
+kubectl rollout status deploy/app1-dp
+kubectl rollout history deploy/app1-dp
+kubectl get all
+
+//error en la imagen
+kubectl set image deployment/app1-dp nginx-container=nginx:1.17.error
+kubectl rollout status deploy/app1-dp
+kubectl get all
+
+kubectl rollout undo deployment/app1-dp
+kubectl rollout history deploy/app1-dp 
+kubectl describe deployment
+kubectl get all
+
+kubectl delete deployment app1-dp
+kubectl get all

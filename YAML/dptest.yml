@@ -1,13 +1,13 @@
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: app1-rc
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: app1-dp
   labels:
     app: app1
     type: front-end
 spec:
   template:
-    metadata:
+    metadata: 
       name: app1-pod
       labels:
         app: app1
@@ -15,5 +15,9 @@ spec:
     spec:
       containers:
       - name: nginx-container
-        image: nginx
-  replicas: 2
+        image: nginx:1.17.3
+  replicas: 5
+  selector:
+    matchLabels:
+      type: front-end
+      app: app1
