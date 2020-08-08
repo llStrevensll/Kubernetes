@@ -10,6 +10,7 @@ spec:
   ports:
   - port: 80
     targetPort: 80
+    nodePort: 31000
     name: "vote-service"
   selector:
     name: vote
