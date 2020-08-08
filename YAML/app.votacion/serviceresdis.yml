@@ -9,7 +9,7 @@ spec:
   type: ClusterIP
   ports:
   - port: 6379
-    targetPorts: 6379
+    targetPort: 6379
     name: "redis-service"
   selector:
     name: redis
