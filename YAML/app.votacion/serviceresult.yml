@@ -10,7 +10,7 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-    NodePort: 31001
+    nodePort: 31001
     name: "result-service"
   selector:
     name: result
