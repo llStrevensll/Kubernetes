@@ -5,13 +5,13 @@ metadata:
   labels:
     name: result
     app: app-votacion
-  spec:
-    type: NodePort
-    ports:
-    - port: 80
-      targetPorts: 80
-      NodePort: 31001
-      name: "result-service"
-    selector:
-      name: result
-      app: app-votacion
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPorts: 80
+    NodePort: 31001
+    name: "result-service"
+  selector:
+    name: result
+    app: app-votacion

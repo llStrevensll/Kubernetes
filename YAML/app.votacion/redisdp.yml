@@ -16,10 +16,10 @@ spec:
       labels:
         name: redis
         app: app-votacion
-      spec:
-        containers:
-        - name: redis
-          image: redis
-          ports:
-          - containerPort: 6379
-            name: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - containerPort: 6379
+          name: redis

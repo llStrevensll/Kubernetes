@@ -5,12 +5,12 @@ metadata:
   labels:
     name: db
     app: app-votacion
-  spec:
-    type: ClusterIP
-    ports:
-    - port: 5432
-      targetPorts: 5432
-      name: "db-service"
-    selector:
-      name: db
-      app: app-votacion
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPorts: 5432
+    name: "db-service"
+  selector:
+    name: db
+    app: app-votacion
