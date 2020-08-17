@@ -268,4 +268,22 @@ kubectl exec secret-env-pod env | grep SECRET
 kubectl delete pod secret-env-pod
 kubectl delete secret mysecret
 
+============
+app votacion
+
+kubectl create namespace appvotacion 
+kubectl apply -f . --namespace=appvotacion
+kubectl get all -n appvotacion
+
+kubectl get po -n appvotacion
+kubectl -n appvotacion logs -f worker-5f54d559b-cz4vg
+
+//escalar
+kubectl scale deployment vote --replicas=5 --namespace=appvotacion
+kubectl scale deployment result --replicas=5 --namespace=appvotacion
+kubectl get all -n appvotacion
+
+
+kubectl delete all --all --namespace=appvotacion
+kubectl delete namespace appvotacion
 
