@@ -138,3 +138,152 @@ kubectl get all
 
 kubectl delete deployment app1-dp
 kubectl get all
+======================================
+Servicios kubernetes
+
+kubectl apply -f dptest.yml
+kubectl apply -f servicetest.yml
+kubectl get all  
+kubectl get services 
+curl localhost:30200  
+
+kubectl apply -f service2test.yml
+kubectl get all 
+kubectl get services  
+
+kubectl delete deployment app1-dp
+kubectl delete service app1-clusteriptest
+kubectl delete service app1-service
+
+=======
+Namespace
+
+kubectl get namespaces
+kubectl get pods --all-namespaces
+
+//comandos iguales:
+kubectl get pods -n kube-system
+kubectl get pods --namespace=kube-system
+kubectl get po -n kube-system
+
+kubectl apply -f dptest.yml
+kubectl get po -n default
+
+======
+ConfigMaps
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
+
+//Multiples archivos dentro de un directorio
+
+# Create the local directory
+mkdir -p configure-pod-container/configmap/
+
+# Download the sample files into `configure-pod-container/configmap/` directory
+wget https://kubernetes.io/examples/configmap/game.properties -O configure-pod-container/configmap/game.properties
+wget https://kubernetes.io/examples/configmap/ui.properties -O configure-pod-container/configmap/ui.properties
+
+# Create the configmap
+kubectl create configmap game-config --from-file=configure-pod-container/configmap/
+
+
+kubectl get configmap
+kubectl get configmap -o wide
+kubectl get configmap game-config -o yaml
+
+kubectl delete configmap game-config
+
+-----
+ConfigMaps sobre un unico archivo
+https://kubernetes.io/docs/tutorials/configuration/configure-redis-using-configmap/
+
+//redis-config
+
+curl -OL https://k8s.io/examples/pods/config/redis-config
+cat redis-config
+kubectl create configmap example-redis-config --from-file=redis-config
+kubectl get configmaps
+kubectl describe configmap example-redis-config
+
+//crear pod
+kubectl create -f configmap.yml
+kubectl get all
+
+kubectl exec redis cat /redis-master/redis.conf
+kubectl exec --stdin --tty redis -- /bin/bash
+
+======
+Configmap con valores literales
+
+kubectl create configmap special-config --from-literal=special.how=very
+kubectl get configmaps
+
+kubectl apply -f configmap2.yml
+kubectl logs test-pod | grep SPECIAL
+
+kubectl delete pod test-pod
+kubectl delete configmap special-config
+=======
+
+Secrets
+
+echo -n 'admin' > ./username.txt
+echo -n 'plsd89j' ./password.txt
+kubectl create secret generic db-user-pass --from-file./username.txt --from-file=./password.txt
+kubectl get secrets
+kubectl describe secrets db-user-pass
+kubectl delete secret db-user-pass
+
+secrets usando archivos de manifiesto (manifest files)
+decodificar secrets
+
+echo -n 'admin' | base64
+echo -n 'password' | base64
+
+kubectl apply -f mysecret.yml
+kubectl get secrets
+kubectl describe secrets mysecret
+
+kubectl get secrets mysecret -o yaml
+
+echo 'YWRtaW4=' | base64 --decode
+echo 'cGFzc3dvcmQ=' | base64 --decode
+kubectl delete secret mysecret
+
+----
+secrets in pod
+
+kubectl apply -f mysecret-pod.yml
+kubectl get pods
+kubectl exec mypod ls /etc/foo
+kubectl exec mypod cat /etc/foo/username
+kubectl exec mypod cat /etc/foo/password
+
+kubectl delete pod mypod
+
+---
+secret with env
+
+kubectl apply -f mysecret-env-pod.yml
+kubectl exec secret-env-pod env | grep SECRET
+kubectl delete pod secret-env-pod
+kubectl delete secret mysecret
+
+============
+app votacion
+
+kubectl create namespace appvotacion 
+kubectl apply -f . --namespace=appvotacion
+kubectl get all -n appvotacion
+
+kubectl get po -n appvotacion
+kubectl -n appvotacion logs -f worker-5f54d559b-cz4vg
+
+//escalar
+kubectl scale deployment vote --replicas=5 --namespace=appvotacion
+kubectl scale deployment result --replicas=5 --namespace=appvotacion
+kubectl get all -n appvotacion
+
+
+kubectl delete all --all --namespace=appvotacion
+kubectl delete namespace appvotacion
+
