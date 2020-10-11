@@ -287,3 +287,9 @@ kubectl get all -n appvotacion
 kubectl delete all --all --namespace=appvotacion
 kubectl delete namespace appvotacion
 
+======
+Access to pod
+https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
+kubectl exec -i -t my-pod --container main-app -- /bin/bash
+kubectl exec -i -t my-pod --container main-app -n mynamespace  -- /bin/bash
+kubectl exec -i -t my-pod -c main-app -n mynamespace  -- /bin/bash
